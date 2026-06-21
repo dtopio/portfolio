@@ -47,7 +47,10 @@ class SkillSeeder extends Seeder
         ];
 
         foreach ($skills as $index => $skill) {
-            Skill::create($skill + ['sort_order' => $index]);
+            Skill::updateOrCreate(
+                ['name' => $skill['name']],
+                $skill + ['sort_order' => $index]
+            );
         }
     }
 }

@@ -46,7 +46,10 @@ class ProjectSeeder extends Seeder
         ];
 
         foreach ($projects as $index => $project) {
-            Project::create($project + ['sort_order' => $index]);
+            Project::updateOrCreate(
+                ['slug' => $project['slug']],
+                $project + ['sort_order' => $index]
+            );
         }
     }
 }

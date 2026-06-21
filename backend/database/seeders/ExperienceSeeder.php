@@ -52,7 +52,13 @@ class ExperienceSeeder extends Seeder
         ];
 
         foreach ($experiences as $index => $experience) {
-            Experience::create($experience + ['sort_order' => $index]);
+            Experience::updateOrCreate(
+                [
+                    'title' => $experience['title'],
+                    'organization' => $experience['organization'],
+                ],
+                $experience + ['sort_order' => $index]
+            );
         }
     }
 }
