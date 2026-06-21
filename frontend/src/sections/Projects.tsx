@@ -5,9 +5,10 @@ import Section from '../components/Section';
 import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
 import ProjectCard from '../components/ProjectCard';
+import AddProjectDialog from '../components/AddProjectDialog';
 
 export default function Projects() {
-  const { data: projects, loading, error } = useFetch(getProjects);
+  const { data: projects, loading, error, refetch } = useFetch(getProjects);
   const [filter, setFilter] = useState<string | null>(null);
 
   const filters = useMemo(() => {
@@ -25,7 +26,13 @@ export default function Projects() {
   );
 
   return (
-    <Section id="projects" index={3} title="Projects" subtitle="A few things I've built recently.">
+    <Section
+      id="projects"
+      index={3}
+      title="Projects"
+      subtitle="A few things I've built recently."
+      action={<AddProjectDialog onCreated={refetch} />}
+    >
       {loading && <LoadingState label="Loading projects…" />}
       {error && <ErrorState message={error} />}
 

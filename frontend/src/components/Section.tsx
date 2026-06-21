@@ -6,10 +6,11 @@ interface SectionProps {
   index: number;
   title: string;
   subtitle?: string;
+  action?: ReactNode;
   children: ReactNode;
 }
 
-export default function Section({ id, index, title, subtitle, children }: SectionProps) {
+export default function Section({ id, index, title, subtitle, action, children }: SectionProps) {
   return (
     <motion.section
       id={id}
@@ -24,7 +25,14 @@ export default function Section({ id, index, title, subtitle, children }: Sectio
         <span className="h-px max-w-10 flex-1 bg-linear-to-r from-accent/60 to-transparent" />
         <h2 className="text-2xl font-semibold text-heading sm:text-3xl">{title}</h2>
       </div>
-      {subtitle && <p className="mt-3 text-text-muted">{subtitle}</p>}
+
+      {(subtitle || action) && (
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          {subtitle ? <p className="text-text-muted">{subtitle}</p> : <span />}
+          {action}
+        </div>
+      )}
+
       <div className="mt-10">{children}</div>
     </motion.section>
   );

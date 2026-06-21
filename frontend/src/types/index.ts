@@ -36,6 +36,26 @@ export interface ContactPayload {
   message: string;
 }
 
+export interface NewProjectPayload {
+  title: string;
+  description: string;
+  tech_stack: string[];
+  tags: string[];
+  github_url: string | null;
+  demo_url: string | null;
+  featured: boolean;
+}
+
+export interface NewExperiencePayload {
+  title: string;
+  organization: string;
+  location: string | null;
+  type: 'work' | 'teaching' | 'education';
+  start_date: string;
+  end_date: string | null;
+  description: string | null;
+}
+
 export interface ApiCollection<T> {
   data: T[];
 }

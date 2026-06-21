@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import type { ApiCollection, ContactPayload, Experience, Project, Skill } from '../types';
+import type {
+  ApiCollection,
+  ContactPayload,
+  Experience,
+  NewExperiencePayload,
+  NewProjectPayload,
+  Project,
+  Skill,
+} from '../types';
 
 const client = axios.create({
   baseURL: API_BASE_URL,
@@ -25,6 +33,27 @@ export async function getExperience(): Promise<Experience[]> {
 export async function postContact(payload: ContactPayload): Promise<string> {
   const { data } = await client.post<{ message: string }>('/contact', payload);
   return data.message;
+}
+
+function authHeader(token: string) {
+  return { headers: { Authorization: `Bearer ${token}` } };
+}
+
+export async function createProject(payload: NewProjectPayload, token: string): Promise<Project> {
+  const { data } = await client.post<{ data: Project }>('/projects', payload, authHeader(token));
+  return data.data;
+}
+
+export async function createExperience(
+  payload: NewExperiencePayload,
+  token: string
+): Promise<Experience> {
+  const { data } = await client.post<{ data: Experience }>(
+    '/experience',
+    payload,
+    authHeader(token)
+  );
+  return data.data;
 }
 
 export function isAxiosValidationError(

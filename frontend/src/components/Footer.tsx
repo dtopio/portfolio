@@ -1,3 +1,5 @@
+import AdminUnlock from './AdminUnlock';
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -19,6 +21,7 @@ export default function Footer() {
           <a href="/cv.pdf" download className="hover:text-accent">
             Download CV
           </a>
+          <AdminUnlock />
         </div>
       </div>
     </footer>
