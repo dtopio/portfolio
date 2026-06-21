@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Admin Token
+    |--------------------------------------------------------------------------
+    |
+    | Shared secret required (as a Bearer token) to create new portfolio
+    | content (projects, experience) via the API. Leave unset in any
+    | environment where those write endpoints should stay disabled.
+    |
+    */
+
+    'admin_token' => env('ADMIN_TOKEN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

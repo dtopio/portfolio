@@ -10,3 +10,8 @@ Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/experience', [ExperienceController::class, 'index']);
 Route::post('/contact', [ContactController::class, 'store']);
+
+Route::middleware('admin.token')->group(function () {
+    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::post('/experience', [ExperienceController::class, 'store']);
+});
