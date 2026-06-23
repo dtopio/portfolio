@@ -1,4 +1,5 @@
 import type { Skill } from '../types';
+import EditSkillDialog from './EditSkillDialog';
 
 const LEVEL_DOTS: Record<string, number> = {
   Advanced: 3,
@@ -6,7 +7,13 @@ const LEVEL_DOTS: Record<string, number> = {
   Beginner: 1,
 };
 
-export default function SkillBadge({ skill }: { skill: Skill }) {
+export default function SkillBadge({
+  skill,
+  onUpdated,
+}: {
+  skill: Skill;
+  onUpdated: () => void;
+}) {
   const filled = LEVEL_DOTS[skill.level] ?? 2;
 
   return (
@@ -39,6 +46,7 @@ export default function SkillBadge({ skill }: { skill: Skill }) {
             />
           ))}
         </span>
+        <EditSkillDialog skill={skill} onUpdated={onUpdated} />
       </span>
     </div>
   );

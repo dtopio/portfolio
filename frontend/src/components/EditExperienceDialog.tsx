@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { Pencil } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -20,27 +21,40 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAdmin } from '../context/AdminContext';
-import { createExperience, isAxiosValidationError } from '../services/api';
-import type { NewExperiencePayload } from '../types';
+import { updateExperience, isAxiosValidationError } from '../services/api';
+import type { Experience, NewExperiencePayload } from '../types';
 
-const EMPTY = {
-  title: '',
-  organization: '',
-  location: '',
-  type: 'work' as NewExperiencePayload['type'],
-  startDate: '',
-  endDate: '',
-  description: '',
-};
+function toForm(experience: Experience) {
+  return {
+    title: experience.title,
+    organization: experience.organization,
+    location: experience.location ?? '',
+    type: experience.type as NewExperiencePayload['type'],
+    startDate: experience.start_date,
+    endDate: experience.end_date ?? '',
+    description: experience.description ?? '',
+  };
+}
 
-export default function AddExperienceDialog({ onCreated }: { onCreated: () => void }) {
+export default function EditExperienceDialog({
+  experience,
+  onUpdated,
+}: {
+  experience: Experience;
+  onUpdated: () => void;
+}) {
   const { token } = useAdmin();
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState(EMPTY);
+  const [form, setForm] = useState(() => toForm(experience));
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!token) return null;
+
+  function handleOpenChange(value: boolean) {
+    if (value) setForm(toForm(experience));
+    setOpen(value);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,7 +62,8 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
     setError(null);
 
     try {
-      await createExperience(
+      await updateExperience(
+        experience.id,
         {
           title: form.title,
           organization: form.organization,
@@ -60,14 +75,13 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
         },
         token!
       );
-      setForm(EMPTY);
       setOpen(false);
-      onCreated();
+      onUpdated();
     } catch (err) {
       setError(
         isAxiosValidationError(err)
           ? err.response.data.message
-          : 'Something went wrong creating the experience entry.'
+          : 'Something went wrong updating the experience entry.'
       );
     } finally {
       setSubmitting(false);
@@ -75,22 +89,23 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          + Add Experience
+        <Button variant="ghost" size="icon-sm" title="Edit experience">
+          <Pencil />
+          <span className="sr-only">Edit experience</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add Experience</DialogTitle>
+          <DialogTitle>Edit Experience</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="exp-title">Title</Label>
+            <Label htmlFor="edit-exp-title">Title</Label>
             <Input
-              id="exp-title"
+              id="edit-exp-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
@@ -98,9 +113,9 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="exp-org">Organization</Label>
+            <Label htmlFor="edit-exp-org">Organization</Label>
             <Input
-              id="exp-org"
+              id="edit-exp-org"
               value={form.organization}
               onChange={(e) => setForm({ ...form, organization: e.target.value })}
               required
@@ -108,23 +123,23 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="exp-location">Location</Label>
+            <Label htmlFor="edit-exp-location">Location</Label>
             <Input
-              id="exp-location"
+              id="edit-exp-location"
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="exp-type">Type</Label>
+            <Label htmlFor="edit-exp-type">Type</Label>
             <Select
               value={form.type}
               onValueChange={(value) =>
                 setForm({ ...form, type: value as NewExperiencePayload['type'] })
               }
             >
-              <SelectTrigger id="exp-type" className="w-full">
+              <SelectTrigger id="edit-exp-type" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -137,9 +152,9 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="exp-start">Start date</Label>
+              <Label htmlFor="edit-exp-start">Start date</Label>
               <Input
-                id="exp-start"
+                id="edit-exp-start"
                 type="date"
                 value={form.startDate}
                 onChange={(e) => setForm({ ...form, startDate: e.target.value })}
@@ -147,9 +162,9 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="exp-end">End date</Label>
+              <Label htmlFor="edit-exp-end">End date</Label>
               <Input
-                id="exp-end"
+                id="edit-exp-end"
                 type="date"
                 value={form.endDate}
                 onChange={(e) => setForm({ ...form, endDate: e.target.value })}
@@ -158,10 +173,10 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="exp-description">Description</Label>
+            <Label htmlFor="edit-exp-description">Description</Label>
             <Textarea
-              id="exp-description"
-              rows={4}
+              id="edit-exp-description"
+              rows={5}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
@@ -171,7 +186,7 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
 
           <DialogFooter>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Saving…' : 'Save Experience'}
+              {submitting ? 'Saving…' : 'Save Changes'}
             </Button>
           </DialogFooter>
         </form>

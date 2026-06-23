@@ -22,7 +22,7 @@ export default function Experience() {
       {!loading && !error && (
         <div className="space-y-8">
           {(experience ?? []).map((item) => (
-            <TimelineItem key={item.id} experience={item} />
+            <TimelineItem key={item.id} experience={item} onUpdated={refetch} />
           ))}
         </div>
       )}

@@ -6,8 +6,11 @@ import type {
   Experience,
   NewExperiencePayload,
   NewProjectPayload,
+  Profile,
   Project,
   Skill,
+  UpdateProfilePayload,
+  UpdateSkillPayload,
 } from '../types';
 
 const client = axios.create({
@@ -27,6 +30,11 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getExperience(): Promise<Experience[]> {
   const { data } = await client.get<ApiCollection<Experience>>('/experience');
+  return data.data;
+}
+
+export async function getProfile(): Promise<Profile> {
+  const { data } = await client.get<{ data: Profile }>('/profile');
   return data.data;
 }
 
@@ -53,6 +61,49 @@ export async function createExperience(
     payload,
     authHeader(token)
   );
+  return data.data;
+}
+
+export async function updateProject(
+  id: number,
+  payload: NewProjectPayload,
+  token: string
+): Promise<Project> {
+  const { data } = await client.put<{ data: Project }>(
+    `/projects/${id}`,
+    payload,
+    authHeader(token)
+  );
+  return data.data;
+}
+
+export async function updateExperience(
+  id: number,
+  payload: NewExperiencePayload,
+  token: string
+): Promise<Experience> {
+  const { data } = await client.put<{ data: Experience }>(
+    `/experience/${id}`,
+    payload,
+    authHeader(token)
+  );
+  return data.data;
+}
+
+export async function updateSkill(
+  id: number,
+  payload: UpdateSkillPayload,
+  token: string
+): Promise<Skill> {
+  const { data } = await client.put<{ data: Skill }>(`/skills/${id}`, payload, authHeader(token));
+  return data.data;
+}
+
+export async function updateProfile(
+  payload: UpdateProfilePayload,
+  token: string
+): Promise<Profile> {
+  const { data } = await client.put<{ data: Profile }>('/profile', payload, authHeader(token));
   return data.data;
 }
 

@@ -56,6 +56,24 @@ export interface NewExperiencePayload {
   description: string | null;
 }
 
+export interface UpdateSkillPayload {
+  name: string;
+  category: string;
+  level: string;
+  icon: string | null;
+}
+
+export interface Profile {
+  id: number;
+  bio: string;
+  location: string | null;
+}
+
+export interface UpdateProfilePayload {
+  bio: string;
+  location: string | null;
+}
+
 export interface ApiCollection<T> {
   data: T[];
 }

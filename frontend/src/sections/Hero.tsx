@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
+import type { Profile } from '../types';
 
-export default function Hero() {
+export default function Hero({ profile }: { profile: Profile | null }) {
   return (
     <section id="top" className="mx-auto max-w-5xl px-6 pt-24 pb-20 text-center sm:pt-32">
       <motion.p
@@ -13,7 +14,7 @@ export default function Hero() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
         </span>
-        Phnom Penh, Cambodia
+        {profile?.location ?? 'Phnom Penh, Cambodia'}
       </motion.p>
 
       <motion.h1

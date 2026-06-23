@@ -70,7 +70,7 @@ export default function Projects() {
 
           <div className="grid gap-6 sm:grid-cols-2">
             {visible.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectCard key={project.id} project={project} onUpdated={refetch} />
             ))}
           </div>
         </>

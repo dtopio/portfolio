@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Lock, Unlock } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -22,10 +23,11 @@ export default function AdminUnlock() {
       <button
         type="button"
         onClick={() => setToken(null)}
-        className="hover:text-accent"
+        className="text-text-muted/40 transition hover:text-accent"
         title="Lock admin mode"
+        aria-label="Lock admin mode"
       >
-        Admin: unlocked
+        <Unlock className="h-4 w-4" />
       </button>
     );
   }
@@ -33,11 +35,16 @@ export default function AdminUnlock() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button type="button" className="hover:text-accent">
-          Admin
+        <button
+          type="button"
+          className="text-text-muted/40 transition hover:text-accent"
+          title="Admin"
+          aria-label="Admin"
+        >
+          <Lock className="h-4 w-4" />
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Unlock admin mode</DialogTitle>
         </DialogHeader>

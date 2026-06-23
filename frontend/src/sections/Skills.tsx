@@ -8,7 +8,7 @@ import SkillBadge from '../components/SkillBadge';
 const CATEGORY_ORDER = ['Frontend', 'Backend', 'Database', 'APIs & Auth', 'Tools & Testing'];
 
 export default function Skills() {
-  const { data: skills, loading, error } = useFetch(getSkills);
+  const { data: skills, loading, error, refetch } = useFetch(getSkills);
 
   const groups = (skills ?? []).reduce<Record<string, typeof skills>>((acc, skill) => {
     (acc[skill.category] ??= []).push(skill);
@@ -33,7 +33,7 @@ export default function Skills() {
               </h3>
               <div className="grid gap-2">
                 {groups[category]!.map((skill) => (
-                  <SkillBadge key={skill.id} skill={skill} />
+                  <SkillBadge key={skill.id} skill={skill} onUpdated={refetch} />
                 ))}
               </div>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Support\Str;
@@ -33,5 +34,16 @@ class ProjectController extends Controller
         return (new ProjectResource($project))
             ->response()
             ->setStatusCode(201);
+    }
+
+    public function update(UpdateProjectRequest $request, Project $project)
+    {
+        $data = $request->validated();
+        $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
+        $data['featured'] ??= false;
+
+        $project->update($data);
+
+        return new ProjectResource($project);
     }
 }

@@ -1,15 +1,25 @@
 import type { Project } from '../types';
+import EditProjectDialog from './EditProjectDialog';
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({
+  project,
+  onUpdated,
+}: {
+  project: Project;
+  onUpdated: () => void;
+}) {
   return (
     <article className="group flex flex-col rounded-xl border border-border bg-linear-to-br from-surface to-surface/60 p-6 shadow-xl shadow-black/20 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/10">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-lg font-semibold text-heading">{project.title}</h3>
-        {project.featured && (
-          <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-mono text-accent">
-            featured
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {project.featured && (
+            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-mono text-accent">
+              featured
+            </span>
+          )}
+          <EditProjectDialog project={project} onUpdated={onUpdated} />
+        </div>
       </div>
 
       <p className="mt-3 flex-1 text-sm text-text-muted">{project.description}</p>

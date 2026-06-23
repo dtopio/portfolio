@@ -1,4 +1,5 @@
 import type { Experience } from '../types';
+import EditExperienceDialog from './EditExperienceDialog';
 
 const TYPE_LABEL: Record<string, string> = {
   work: 'Work',
@@ -10,17 +11,26 @@ function formatDate(value: string): string {
   return new Date(value).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
-export default function TimelineItem({ experience }: { experience: Experience }) {
+export default function TimelineItem({
+  experience,
+  onUpdated,
+}: {
+  experience: Experience;
+  onUpdated: () => void;
+}) {
   return (
     <div className="relative rounded-lg border-l-2 border-border py-2 pl-6 transition hover:border-accent/60">
       <span className="absolute -left-1.75 top-3.5 h-3 w-3 rounded-full bg-accent shadow-[0_0_0_4px_rgba(45,212,191,0.15)]" />
 
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-base font-semibold text-heading">{experience.title}</h3>
-        <span className="font-mono text-xs text-text-muted">
-          {formatDate(experience.start_date)} —{' '}
-          {experience.end_date ? formatDate(experience.end_date) : 'Present'}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs text-text-muted">
+            {formatDate(experience.start_date)} —{' '}
+            {experience.end_date ? formatDate(experience.end_date) : 'Present'}
+          </span>
+          <EditExperienceDialog experience={experience} onUpdated={onUpdated} />
+        </div>
       </div>
 
       <p className="mt-1 text-sm text-accent">
