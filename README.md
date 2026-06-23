@@ -73,22 +73,3 @@ php artisan config:cache
 php artisan route:cache
 ```
 
-Serve `frontend/dist` from any static host (Nginx, Vercel, Netlify, etc.) and point
-its `VITE_API_BASE_URL` at your deployed Laravel API. For a relational database in
-production, switch `DB_CONNECTION` in `backend/.env` from `sqlite` to `mysql`/`pgsql`
-and update the matching `DB_*` variables.
-
-## Editing content
-
-All portfolio content lives in the database seeders:
-
-- `backend/database/seeders/SkillSeeder.php`
-- `backend/database/seeders/ProjectSeeder.php`
-- `backend/database/seeders/ExperienceSeeder.php`
-
-Edit the arrays in those files and re-run `php artisan db:seed` (or
-`php artisan migrate:fresh --seed` to start clean) to update the data the
-frontend displays.
-
-To add a real CV, drop a `cv.pdf` file into `frontend/public/` — the Hero and
-footer "Download CV" links already point at `/cv.pdf`.
