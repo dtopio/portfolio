@@ -81,7 +81,7 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
           + Add Experience
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Add Experience</DialogTitle>
         </DialogHeader>
@@ -161,7 +161,7 @@ export default function AddExperienceDialog({ onCreated }: { onCreated: () => vo
             <Label htmlFor="exp-description">Description</Label>
             <Textarea
               id="exp-description"
-              rows={4}
+              rows={8}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />

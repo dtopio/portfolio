@@ -80,7 +80,7 @@ export default function AddProjectDialog({ onCreated }: { onCreated: () => void 
           + Add Project
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Add Project</DialogTitle>
         </DialogHeader>
@@ -100,7 +100,7 @@ export default function AddProjectDialog({ onCreated }: { onCreated: () => void 
             <Label htmlFor="project-description">Description</Label>
             <Textarea
               id="project-description"
-              rows={4}
+              rows={8}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required

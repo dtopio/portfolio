@@ -28,6 +28,7 @@ class UpdateSkillRequest extends FormRequest
             'category' => ['required', 'string', 'max:160'],
             'level' => ['required', Rule::in(['Beginner', 'Intermediate', 'Advanced'])],
             'icon' => ['nullable', 'string', 'max:255'],
+            'featured' => ['boolean'],
         ];
     }
 }

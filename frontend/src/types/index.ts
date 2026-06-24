@@ -4,6 +4,7 @@ export interface Skill {
   category: string;
   level: string;
   icon: string | null;
+  featured: boolean;
 }
 
 export interface Project {
@@ -36,6 +37,15 @@ export interface ContactPayload {
   message: string;
 }
 
+export interface Message {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string | null;
+  read_at: string | null;
+}
+
 export interface NewProjectPayload {
   title: string;
   description: string;
@@ -61,17 +71,29 @@ export interface UpdateSkillPayload {
   category: string;
   level: string;
   icon: string | null;
+  featured: boolean;
 }
+
+export type NewSkillPayload = UpdateSkillPayload;
 
 export interface Profile {
   id: number;
   bio: string;
   location: string | null;
+  tagline: string | null;
+  summary: string | null;
+  stack: string[];
+  has_cv: boolean;
+  cv_filename: string | null;
+  cv_uploaded_at: string | null;
 }
 
 export interface UpdateProfilePayload {
   bio: string;
   location: string | null;
+  tagline: string | null;
+  summary: string | null;
+  stack: string[];
 }
 
 export interface ApiCollection<T> {

@@ -1,42 +1,52 @@
+import { Link } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
 import { getSkills } from '../services/api';
 import Section from '../components/Section';
 import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
 import SkillBadge from '../components/SkillBadge';
+import AddSkillDialog from '../components/AddSkillDialog';
+import { Button } from '@/components/ui/button';
 
-const CATEGORY_ORDER = ['Frontend', 'Backend', 'Database', 'APIs & Auth', 'Tools & Testing'];
+const FALLBACK_LIMIT = 6;
 
 export default function Skills() {
   const { data: skills, loading, error, refetch } = useFetch(getSkills);
 
-  const groups = (skills ?? []).reduce<Record<string, typeof skills>>((acc, skill) => {
-    (acc[skill.category] ??= []).push(skill);
-    return acc;
-  }, {});
-
-  const categories = Object.keys(groups).sort(
-    (a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b)
-  );
+  const featured = (skills ?? []).filter((skill) => skill.featured);
+  const fallback = (skills ?? [])
+    .filter((skill) => skill.level === 'Advanced')
+    .slice(0, FALLBACK_LIMIT);
+  const teaser = featured.length > 0 ? featured : fallback;
 
   return (
-    <Section id="skills" index={2} title="Skills & Tech Stack">
+    <Section
+      id="skills"
+      index={2}
+      title="Skills & Tech Stack"
+      subtitle="A few of the tools I reach for most."
+      action={
+        <div className="flex items-center gap-2">
+          <AddSkillDialog onCreated={refetch} />
+          <Button asChild variant="outline" size="sm">
+            <Link to="/skills">View All Skills</Link>
+          </Button>
+        </div>
+      }
+    >
       {loading && <LoadingState label="Loading skills…" />}
       {error && <ErrorState message={error} />}
 
-      {!loading && !error && (
-        <div className="columns-1 gap-8 sm:columns-2">
-          {categories.map((category) => (
-            <div key={category} className="mb-8 break-inside-avoid-column">
-              <h3 className="mb-3 font-mono text-sm uppercase tracking-wide text-text-muted">
-                {category}
-              </h3>
-              <div className="grid gap-2">
-                {groups[category]!.map((skill) => (
-                  <SkillBadge key={skill.id} skill={skill} onUpdated={refetch} />
-                ))}
-              </div>
-            </div>
+      {!loading && !error && teaser.length === 0 && (
+        <p className="text-text-muted">
+          No skills added yet — use "+ Add Skill" above to get started.
+        </p>
+      )}
+
+      {!loading && !error && teaser.length > 0 && (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {teaser.map((skill) => (
+            <SkillBadge key={skill.id} skill={skill} editable={false} />
           ))}
         </div>
       )}

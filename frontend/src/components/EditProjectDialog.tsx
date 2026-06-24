@@ -96,7 +96,7 @@ export default function EditProjectDialog({
           <span className="sr-only">Edit project</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>
         </DialogHeader>
@@ -116,7 +116,7 @@ export default function EditProjectDialog({
             <Label htmlFor="edit-project-description">Description</Label>
             <Textarea
               id="edit-project-description"
-              rows={5}
+              rows={10}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required

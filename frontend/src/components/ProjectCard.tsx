@@ -1,5 +1,7 @@
 import type { Project } from '../types';
 import EditProjectDialog from './EditProjectDialog';
+import ToggleProjectFeaturedButton from './ToggleProjectFeaturedButton';
+import { useAdmin } from '../context/AdminContext';
 
 export default function ProjectCard({
   project,
@@ -8,6 +10,9 @@ export default function ProjectCard({
   project: Project;
   onUpdated: () => void;
 }) {
+  const { token } = useAdmin();
+  const showAdminControls = !!token;
+
   return (
     <article className="group flex flex-col rounded-xl border border-border bg-linear-to-br from-surface to-surface/60 p-6 shadow-xl shadow-black/20 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/10">
       <div className="flex items-start justify-between gap-2">
@@ -18,7 +23,12 @@ export default function ProjectCard({
               featured
             </span>
           )}
-          <EditProjectDialog project={project} onUpdated={onUpdated} />
+          {showAdminControls && (
+            <>
+              <ToggleProjectFeaturedButton project={project} onUpdated={onUpdated} />
+              <EditProjectDialog project={project} onUpdated={onUpdated} />
+            </>
+          )}
         </div>
       </div>
 

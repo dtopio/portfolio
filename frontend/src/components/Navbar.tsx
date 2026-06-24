@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Inbox } from 'lucide-react';
+import { useAdmin } from '../context/AdminContext';
+import AdminUnlock from './AdminUnlock';
 
 const LINKS = [
   { href: '#about', label: 'About' },
@@ -10,6 +14,7 @@ const LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { token } = useAdmin();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-bg/70 backdrop-blur-md">
@@ -18,7 +23,7 @@ export default function Navbar() {
           danil<span className="text-accent">.</span>top
         </a>
 
-        <ul className="hidden gap-6 md:flex">
+        <ul className="hidden items-center gap-6 md:flex">
           {LINKS.map((link) => (
             <li key={link.href}>
               <a
@@ -30,6 +35,21 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          {token && (
+            <li>
+              <Link
+                to="/inbox"
+                title="Inbox"
+                aria-label="Inbox"
+                className="flex items-center text-text-muted transition hover:text-accent"
+              >
+                <Inbox className="h-4 w-4" />
+              </Link>
+            </li>
+          )}
+          <li className="flex items-center">
+            <AdminUnlock />
+          </li>
         </ul>
 
         <button
@@ -55,6 +75,21 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          {token && (
+            <li>
+              <Link
+                to="/inbox"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 py-2 text-sm text-text-muted transition hover:text-accent"
+              >
+                <Inbox className="h-4 w-4" />
+                Inbox
+              </Link>
+            </li>
+          )}
+          <li className="py-2">
+            <AdminUnlock />
+          </li>
         </ul>
       )}
     </header>

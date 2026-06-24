@@ -44,7 +44,7 @@ export default function AdminUnlock() {
           <Lock className="h-4 w-4" />
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Unlock admin mode</DialogTitle>
         </DialogHeader>

@@ -12,7 +12,12 @@ class Skill extends Model
         'category',
         'level',
         'icon',
+        'featured',
         'sort_order',
+    ];
+
+    protected $casts = [
+        'featured' => 'boolean',
     ];
 
     public function scopeOrdered(Builder $query): Builder
