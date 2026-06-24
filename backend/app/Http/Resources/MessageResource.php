@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SkillResource extends JsonResource
+class MessageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,10 @@ class SkillResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category' => $this->category,
-            'level' => $this->level,
-            'icon' => $this->icon,
-            'featured' => $this->featured,
+            'email' => $this->email,
+            'message' => $this->message,
+            'created_at' => $this->created_at?->toIso8601String(),
+            'read_at' => $this->read_at?->toIso8601String(),
         ];
     }
 }

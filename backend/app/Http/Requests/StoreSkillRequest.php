@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateProfileRequest extends FormRequest
+class StoreSkillRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +24,11 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bio' => ['required', 'string'],
-            'location' => ['nullable', 'string', 'max:160'],
-            'tagline' => ['nullable', 'string', 'max:160'],
-            'summary' => ['nullable', 'string'],
-            'stack' => ['nullable', 'array'],
-            'stack.*' => ['string', 'max:60'],
+            'name' => ['required', 'string', 'max:160'],
+            'category' => ['required', 'string', 'max:160'],
+            'level' => ['required', Rule::in(['Beginner', 'Intermediate', 'Advanced'])],
+            'icon' => ['nullable', 'string', 'max:255'],
+            'featured' => ['boolean'],
         ];
     }
 }

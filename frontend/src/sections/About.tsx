@@ -2,7 +2,7 @@ import Section from '../components/Section';
 import EditProfileDialog from '../components/EditProfileDialog';
 import type { Profile } from '../types';
 
-const STACK = [
+const DEFAULT_STACK = [
   'Vue 3',
   'React',
   'TypeScript',
@@ -25,6 +25,7 @@ export default function About({
   onUpdated: () => void;
 }) {
   const paragraphs = (profile?.bio ?? DEFAULT_BIO).split(/\n{2,}/).filter(Boolean);
+  const stack = profile?.stack && profile.stack.length > 0 ? profile.stack : DEFAULT_STACK;
 
   return (
     <Section
@@ -41,7 +42,7 @@ export default function About({
         </div>
 
         <ul className="flex flex-wrap gap-2 self-start">
-          {STACK.map((item) => (
+          {stack.map((item) => (
             <li
               key={item}
               className="rounded-md bg-surface px-2.5 py-1 font-mono text-xs text-accent ring-1 ring-border"

@@ -30,6 +30,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Admin Notification Email
+    |--------------------------------------------------------------------------
+    |
+    | Address that receives an email whenever someone submits the contact
+    | form. Leave unset to skip sending notification emails entirely.
+    |
+    */
+
+    'admin_notification_email' => env('ADMIN_NOTIFICATION_EMAIL'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

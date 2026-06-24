@@ -1,7 +1,9 @@
-import AdminUnlock from './AdminUnlock';
+import { CV_DOWNLOAD_URL } from '../services/api';
+import { useProfile } from '../context/ProfileContext';
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { profile } = useProfile();
 
   return (
     <footer className="border-t border-border">
@@ -18,10 +20,11 @@ export default function Footer() {
           <a href="mailto:topdanil.dev@gmail.com" className="hover:text-accent">
             Email
           </a>
-          <a href="/cv.pdf" download className="hover:text-accent">
-            Download CV
-          </a>
-          <AdminUnlock />
+          {profile?.has_cv && (
+            <a href={CV_DOWNLOAD_URL} download className="hover:text-accent">
+              Download CV
+            </a>
+          )}
         </div>
       </div>
     </footer>

@@ -4,8 +4,10 @@ import type {
   ApiCollection,
   ContactPayload,
   Experience,
+  Message,
   NewExperiencePayload,
   NewProjectPayload,
+  NewSkillPayload,
   Profile,
   Project,
   Skill,
@@ -90,6 +92,11 @@ export async function updateExperience(
   return data.data;
 }
 
+export async function createSkill(payload: NewSkillPayload, token: string): Promise<Skill> {
+  const { data } = await client.post<{ data: Skill }>('/skills', payload, authHeader(token));
+  return data.data;
+}
+
 export async function updateSkill(
   id: number,
   payload: UpdateSkillPayload,
@@ -99,12 +106,47 @@ export async function updateSkill(
   return data.data;
 }
 
+export async function deleteSkill(id: number, token: string): Promise<void> {
+  await client.delete(`/skills/${id}`, authHeader(token));
+}
+
 export async function updateProfile(
   payload: UpdateProfilePayload,
   token: string
 ): Promise<Profile> {
   const { data } = await client.put<{ data: Profile }>('/profile', payload, authHeader(token));
   return data.data;
+}
+
+export const CV_DOWNLOAD_URL = `${API_BASE_URL}/profile/cv`;
+
+export async function uploadCv(file: File, token: string): Promise<Profile> {
+  const formData = new FormData();
+  formData.append('cv', file);
+  const { data } = await client.post<{ data: Profile }>(
+    '/profile/cv',
+    formData,
+    authHeader(token)
+  );
+  return data.data;
+}
+
+export async function getMessages(token: string): Promise<Message[]> {
+  const { data } = await client.get<ApiCollection<Message>>('/messages', authHeader(token));
+  return data.data;
+}
+
+export async function markMessageRead(id: number, token: string): Promise<Message> {
+  const { data } = await client.patch<{ data: Message }>(
+    `/messages/${id}/read`,
+    {},
+    authHeader(token)
+  );
+  return data.data;
+}
+
+export async function deleteMessage(id: number, token: string): Promise<void> {
+  await client.delete(`/messages/${id}`, authHeader(token));
 }
 
 export function isAxiosValidationError(

@@ -1,5 +1,8 @@
 import type { Skill } from '../types';
 import EditSkillDialog from './EditSkillDialog';
+import DeleteSkillDialog from './DeleteSkillDialog';
+import ToggleFeaturedButton from './ToggleFeaturedButton';
+import { useAdmin } from '../context/AdminContext';
 
 const LEVEL_DOTS: Record<string, number> = {
   Advanced: 3,
@@ -10,11 +13,15 @@ const LEVEL_DOTS: Record<string, number> = {
 export default function SkillBadge({
   skill,
   onUpdated,
+  editable = true,
 }: {
   skill: Skill;
-  onUpdated: () => void;
+  onUpdated?: () => void;
+  editable?: boolean;
 }) {
+  const { token } = useAdmin();
   const filled = LEVEL_DOTS[skill.level] ?? 2;
+  const showAdminControls = editable && !!onUpdated && !!token;
 
   return (
     <div className="flex items-center justify-between rounded-lg border border-border bg-surface/80 px-4 py-3 transition hover:border-accent/40 hover:bg-surface">
@@ -46,7 +53,13 @@ export default function SkillBadge({
             />
           ))}
         </span>
-        <EditSkillDialog skill={skill} onUpdated={onUpdated} />
+        {showAdminControls && (
+          <>
+            <ToggleFeaturedButton skill={skill} onUpdated={onUpdated} />
+            <EditSkillDialog skill={skill} onUpdated={onUpdated} />
+            <DeleteSkillDialog skill={skill} onDeleted={onUpdated} />
+          </>
+        )}
       </span>
     </div>
   );

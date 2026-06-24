@@ -6,6 +6,15 @@ import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
 import ProjectCard from '../components/ProjectCard';
 import AddProjectDialog from '../components/AddProjectDialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+const ALL_FILTER = '__all__';
 
 export default function Projects() {
   const { data: projects, loading, error, refetch } = useFetch(getProjects);
@@ -39,32 +48,23 @@ export default function Projects() {
       {!loading && !error && (
         <>
           {filters.length > 0 && (
-            <div className="mb-8 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setFilter(null)}
-                className={`rounded-full px-3 py-1 text-xs font-mono transition ${
-                  filter === null
-                    ? 'bg-accent text-bg'
-                    : 'bg-surface text-text-muted ring-1 ring-border hover:text-accent'
-                }`}
+            <div className="mb-8">
+              <Select
+                value={filter ?? ALL_FILTER}
+                onValueChange={(value) => setFilter(value === ALL_FILTER ? null : value)}
               >
-                All
-              </button>
-              {filters.map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => setFilter(tag)}
-                  className={`rounded-full px-3 py-1 text-xs font-mono transition ${
-                    filter === tag
-                      ? 'bg-accent text-bg'
-                      : 'bg-surface text-text-muted ring-1 ring-border hover:text-accent'
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
+                <SelectTrigger className="w-full sm:w-64">
+                  <SelectValue placeholder="Filter by tag" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ALL_FILTER}>All</SelectItem>
+                  {filters.map((tag) => (
+                    <SelectItem key={tag} value={tag}>
+                      {tag}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
 

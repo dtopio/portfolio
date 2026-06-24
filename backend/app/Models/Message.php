@@ -11,5 +11,10 @@ class Message extends Model
         'email',
         'message',
         'ip',
+        'read_at',
+    ];
+
+    protected $casts = [
+        'read_at' => 'datetime',
     ];
 }

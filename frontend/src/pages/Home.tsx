@@ -1,5 +1,4 @@
-import { useFetch } from '../hooks/useFetch';
-import { getProfile } from '../services/api';
+import { useProfile } from '../context/ProfileContext';
 import Hero from '../sections/Hero';
 import About from '../sections/About';
 import Skills from '../sections/Skills';
@@ -8,7 +7,7 @@ import Experience from '../sections/Experience';
 import Contact from '../sections/Contact';
 
 export default function Home() {
-  const { data: profile, refetch } = useFetch(getProfile);
+  const { profile, refetch } = useProfile();
 
   return (
     <>

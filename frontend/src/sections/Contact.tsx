@@ -41,7 +41,7 @@ export default function Contact() {
 
   return (
     <Section id="contact" index={5} title="Contact" subtitle="Have a project in mind? Let's talk.">
-      <form onSubmit={handleSubmit} className="mx-auto max-w-lg space-y-4 text-left">
+      <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-5 text-left">
         <div>
           <label htmlFor="name" className="text-sm text-text-muted">
             Name
@@ -51,7 +51,7 @@ export default function Contact() {
             name="name"
             type="text"
             required
-            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-heading outline-none focus:border-accent"
+            className="mt-1.5 w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-heading outline-none focus:border-accent"
           />
           {fieldErrors.name && (
             <p className="mt-1 text-xs text-red-300">{fieldErrors.name[0]}</p>
@@ -67,7 +67,7 @@ export default function Contact() {
             name="email"
             type="email"
             required
-            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-heading outline-none focus:border-accent"
+            className="mt-1.5 w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-heading outline-none focus:border-accent"
           />
           {fieldErrors.email && (
             <p className="mt-1 text-xs text-red-300">{fieldErrors.email[0]}</p>
@@ -81,9 +81,9 @@ export default function Contact() {
           <textarea
             id="message"
             name="message"
-            rows={5}
+            rows={10}
             required
-            className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-heading outline-none focus:border-accent"
+            className="mt-1.5 w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-heading outline-none focus:border-accent"
           />
           {fieldErrors.message && (
             <p className="mt-1 text-xs text-red-300">{fieldErrors.message[0]}</p>

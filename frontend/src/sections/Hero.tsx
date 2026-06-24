@@ -1,5 +1,24 @@
 import { motion } from 'framer-motion';
+import { CV_DOWNLOAD_URL } from '../services/api';
 import type { Profile } from '../types';
+
+const DEFAULT_TAGLINE = 'Front-End Developer · Full-Stack Experience';
+
+const DEFAULT_SUMMARY =
+  'I specialise in **Vue**, **React** and **TypeScript**, with hands-on full-stack experience using **Laravel** and **Node.js** backends — from UI/UX and REST API integration to database design and performance tuning.';
+
+function renderHighlighted(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <span key={index} className="font-mono text-accent">
+          {part.slice(2, -2)}
+        </span>
+      );
+    }
+    return part;
+  });
+}
 
 export default function Hero({ profile }: { profile: Profile | null }) {
   return (
@@ -32,7 +51,7 @@ export default function Hero({ profile }: { profile: Profile | null }) {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="mt-3 text-lg text-text-muted sm:text-xl"
       >
-        Front-End Developer · Full-Stack Experience
+        {profile?.tagline ?? DEFAULT_TAGLINE}
       </motion.p>
 
       <motion.p
@@ -41,12 +60,7 @@ export default function Hero({ profile }: { profile: Profile | null }) {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="mx-auto mt-4 max-w-xl text-text-muted"
       >
-        I specialise in <span className="font-mono text-accent">Vue</span>,{' '}
-        <span className="font-mono text-accent">React</span> and{' '}
-        <span className="font-mono text-accent">TypeScript</span>, with hands-on
-        full-stack experience using <span className="font-mono text-accent">Laravel</span>{' '}
-        and <span className="font-mono text-accent">Node.js</span> backends — from
-        UI/UX and REST API integration to database design and performance tuning.
+        {renderHighlighted(profile?.summary ?? DEFAULT_SUMMARY)}
       </motion.p>
 
       <motion.div
@@ -61,13 +75,15 @@ export default function Hero({ profile }: { profile: Profile | null }) {
         >
           View Projects
         </a>
-        <a
-          href="/cv.pdf"
-          download
-          className="rounded-lg border border-border bg-surface/60 px-5 py-2.5 text-sm font-medium text-heading transition hover:border-accent hover:text-accent"
-        >
-          Download CV
-        </a>
+        {profile?.has_cv && (
+          <a
+            href={CV_DOWNLOAD_URL}
+            download
+            className="rounded-lg border border-border bg-surface/60 px-5 py-2.5 text-sm font-medium text-heading transition hover:border-accent hover:text-accent"
+          >
+            Download CV
+          </a>
+        )}
         <a
           href="#contact"
           className="rounded-lg border border-border bg-surface/60 px-5 py-2.5 text-sm font-medium text-heading transition hover:border-accent hover:text-accent"
