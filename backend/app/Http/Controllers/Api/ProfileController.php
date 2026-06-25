@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UploadCvRequest;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
+use App\Support\Binary;
 
 class ProfileController extends Controller
 {
@@ -29,7 +30,7 @@ class ProfileController extends Controller
         $profile = Profile::current();
 
         $profile->update([
-            'cv' => file_get_contents($file->getRealPath()),
+            'cv' => Binary::encode(file_get_contents($file->getRealPath())),
             'cv_filename' => $file->getClientOriginalName(),
             'cv_uploaded_at' => now(),
         ]);
@@ -45,7 +46,7 @@ class ProfileController extends Controller
             abort(404, 'No CV uploaded yet.');
         }
 
-        return response($profile->cv, 200, [
+        return response(Binary::decode($profile->cv), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.($profile->cv_filename ?? 'cv.pdf').'"',
         ]);

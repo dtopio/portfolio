@@ -7,6 +7,7 @@ use App\Http\Requests\UploadProjectImagesRequest;
 use App\Http\Resources\ProjectImageResource;
 use App\Models\Project;
 use App\Models\ProjectImage;
+use App\Support\Binary;
 
 class ProjectImageController extends Controller
 {
@@ -16,7 +17,7 @@ class ProjectImageController extends Controller
 
         $images = collect($request->file('images'))->map(function ($file, $index) use ($project, $nextSortOrder) {
             return $project->images()->create([
-                'image' => file_get_contents($file->getRealPath()),
+                'image' => Binary::encode(file_get_contents($file->getRealPath())),
                 'content_type' => $file->getMimeType(),
                 'sort_order' => $nextSortOrder + $index,
             ]);
@@ -29,7 +30,7 @@ class ProjectImageController extends Controller
 
     public function show(ProjectImage $projectImage)
     {
-        return response($projectImage->image, 200, [
+        return response(Binary::decode($projectImage->image), 200, [
             'Content-Type' => $projectImage->content_type,
         ]);
     }
