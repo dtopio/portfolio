@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useFetch } from '../hooks/useFetch';
 import { getSkills } from '../services/api';
 import Section from '../components/Section';
@@ -7,11 +8,12 @@ import ErrorState from '../components/ErrorState';
 import SkillBadge from '../components/SkillBadge';
 import AddSkillDialog from '../components/AddSkillDialog';
 import { Button } from '@/components/ui/button';
+import { staggerContainer } from '../lib/motion';
 
 const FALLBACK_LIMIT = 6;
 
 export default function Skills() {
-  const { data: skills, loading, error, refetch } = useFetch(getSkills);
+  const { data: skills, loading, error, refetch } = useFetch(['skills'], getSkills);
 
   const featured = (skills ?? []).filter((skill) => skill.featured);
   const fallback = (skills ?? [])
@@ -44,11 +46,17 @@ export default function Skills() {
       )}
 
       {!loading && !error && teaser.length > 0 && (
-        <div className="grid gap-2 sm:grid-cols-2">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid gap-2 sm:grid-cols-2"
+        >
           {teaser.map((skill) => (
             <SkillBadge key={skill.id} skill={skill} editable={false} />
           ))}
-        </div>
+        </motion.div>
       )}
     </Section>
   );

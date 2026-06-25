@@ -25,6 +25,7 @@ class ProjectResource extends JsonResource
             'demo_url' => $this->demo_url,
             'image' => $this->image,
             'featured' => $this->featured,
+            'images' => ProjectImageResource::collection($this->whenLoaded('images')),
         ];
     }
 }

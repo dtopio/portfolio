@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion';
 import Section from '../components/Section';
 import EditProfileDialog from '../components/EditProfileDialog';
 import type { Profile } from '../types';
+import { staggerContainer, fadeUpItem } from '../lib/motion';
 
 const DEFAULT_STACK = [
   'Vue 3',
@@ -41,16 +43,23 @@ export default function About({
           ))}
         </div>
 
-        <ul className="flex flex-wrap gap-2 self-start">
+        <motion.ul
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="flex flex-wrap gap-2 self-start"
+        >
           {stack.map((item) => (
-            <li
+            <motion.li
               key={item}
+              variants={fadeUpItem}
               className="rounded-md bg-surface px-2.5 py-1 font-mono text-xs text-accent ring-1 ring-border"
             >
               {item}
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </div>
     </Section>
   );

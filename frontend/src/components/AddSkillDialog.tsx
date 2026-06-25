@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import {
   Dialog,
@@ -30,12 +30,19 @@ const EMPTY = {
   featured: false,
 };
 
-export default function AddSkillDialog({ onCreated }: { onCreated: () => void }) {
+export default function AddSkillDialog({
+  onCreated,
+  categories = [],
+}: {
+  onCreated: () => void;
+  categories?: string[];
+}) {
   const { token } = useAdmin();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const categoryListId = useId();
 
   if (!token) return null;
 
@@ -96,11 +103,20 @@ export default function AddSkillDialog({ onCreated }: { onCreated: () => void })
             <Label htmlFor="add-skill-category">Category</Label>
             <Input
               id="add-skill-category"
+              list={categoryListId}
               placeholder="Frontend"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
               required
             />
+            <datalist id={categoryListId}>
+              {categories.map((category) => (
+                <option key={category} value={category} />
+              ))}
+            </datalist>
+            <p className="text-xs text-text-muted">
+              Pick an existing category or type a new one to create it.
+            </p>
           </div>
 
           <div className="space-y-1.5">

@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdmin } from '../context/AdminContext';
 import { useFetch } from '../hooks/useFetch';
@@ -10,12 +9,11 @@ import MessageRow from '../components/MessageRow';
 export default function Inbox() {
   const { token } = useAdmin();
 
-  const fetchMessages = useCallback(() => {
-    if (!token) return Promise.resolve([]);
-    return getMessages(token);
-  }, [token]);
-
-  const { data: messages, loading, error, refetch } = useFetch(fetchMessages);
+  const { data: messages, loading, error, refetch } = useFetch(
+    ['messages'],
+    () => getMessages(token!),
+    { enabled: !!token }
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
