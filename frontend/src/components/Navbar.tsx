@@ -3,6 +3,8 @@ import type { MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Inbox } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
+import { useFetch } from '../hooks/useFetch';
+import { getMessages } from '../services/api';
 import AdminUnlock from './AdminUnlock';
 import PreviewToggleButton from './PreviewToggleButton';
 
@@ -19,6 +21,11 @@ export default function Navbar() {
   const { token } = useAdmin();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { data: messages } = useFetch(['messages'], () => getMessages(token!), {
+    enabled: !!token,
+  });
+  const hasUnread = (messages ?? []).some((message) => !message.read_at);
 
   function handleHashClick(event: MouseEvent<HTMLAnchorElement>, hash: string) {
     if (location.pathname === '/') return;
@@ -56,9 +63,12 @@ export default function Navbar() {
                 to="/inbox"
                 title="Inbox"
                 aria-label="Inbox"
-                className="flex items-center text-text-muted transition hover:text-accent"
+                className="relative flex items-center text-text-muted transition hover:text-accent"
               >
                 <Inbox className="h-4 w-4" />
+                {hasUnread && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent" />
+                )}
               </Link>
             </li>
           )}
@@ -103,7 +113,12 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2 py-2 text-sm text-text-muted transition hover:text-accent"
               >
-                <Inbox className="h-4 w-4" />
+                <span className="relative flex items-center">
+                  <Inbox className="h-4 w-4" />
+                  {hasUnread && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent" />
+                  )}
+                </span>
                 Inbox
               </Link>
             </li>

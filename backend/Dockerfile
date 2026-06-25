@@ -16,7 +16,8 @@ WORKDIR /app
 COPY --from=vendor /app/vendor ./vendor
 COPY . .
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs storage/app/public \
+    && chmod -R 775 storage bootstrap/cache
 RUN php artisan package:discover --ansi
 
 CMD php artisan migrate --force && php artisan serve --host 0.0.0.0 --port ${PORT:-10000}
