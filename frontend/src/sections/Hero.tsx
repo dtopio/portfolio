@@ -78,7 +78,8 @@ export default function Hero({ profile }: { profile: Profile | null }) {
         {profile?.has_cv && (
           <a
             href={CV_DOWNLOAD_URL}
-            download
+            target="_blank"
+            rel="noreferrer"
             className="rounded-lg border border-border bg-surface/60 px-5 py-2.5 text-sm font-medium text-heading transition hover:border-accent hover:text-accent"
           >
             Download CV

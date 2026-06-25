@@ -17,11 +17,16 @@ export default function Footer() {
           <a href="https://www.linkedin.com/in/danil-top-b07b1540a" target="_blank" rel="noreferrer" className="hover:text-accent">
             LinkedIn
           </a>
-          <a href="mailto:topdanil.dev@gmail.com" className="hover:text-accent">
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=topdanil.dev@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-accent"
+          >
             Email
           </a>
           {profile?.has_cv && (
-            <a href={CV_DOWNLOAD_URL} download className="hover:text-accent">
+            <a href={CV_DOWNLOAD_URL} target="_blank" rel="noreferrer" className="hover:text-accent">
               Download CV
             </a>
           )}
