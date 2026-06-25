@@ -7,6 +7,12 @@ export interface Skill {
   featured: boolean;
 }
 
+export interface ProjectImage {
+  id: number;
+  url: string;
+  sort_order: number;
+}
+
 export interface Project {
   id: number;
   title: string;
@@ -18,6 +24,7 @@ export interface Project {
   demo_url: string | null;
   image: string | null;
   featured: boolean;
+  images: ProjectImage[];
 }
 
 export interface Experience {

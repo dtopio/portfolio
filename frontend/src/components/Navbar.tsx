@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import type { MouseEvent } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Inbox } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import AdminUnlock from './AdminUnlock';
+import PreviewToggleButton from './PreviewToggleButton';
 
 const LINKS = [
   { href: '#about', label: 'About' },
@@ -15,11 +17,23 @@ const LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { token } = useAdmin();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function handleHashClick(event: MouseEvent<HTMLAnchorElement>, hash: string) {
+    if (location.pathname === '/') return;
+    event.preventDefault();
+    navigate(`/${hash}`);
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-bg/70 backdrop-blur-md">
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#top" className="text-gradient font-mono text-lg font-semibold">
+        <a
+          href="#top"
+          onClick={(event) => handleHashClick(event, '#top')}
+          className="text-gradient font-mono text-lg font-semibold"
+        >
           danil<span className="text-accent">.</span>top
         </a>
 
@@ -28,6 +42,7 @@ export default function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
+                onClick={(event) => handleHashClick(event, link.href)}
                 className="group relative text-sm text-text-muted transition hover:text-accent"
               >
                 {link.label}
@@ -47,6 +62,9 @@ export default function Navbar() {
               </Link>
             </li>
           )}
+          <li className="flex items-center">
+            <PreviewToggleButton />
+          </li>
           <li className="flex items-center">
             <AdminUnlock />
           </li>
@@ -68,7 +86,10 @@ export default function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
-                onClick={() => setOpen(false)}
+                onClick={(event) => {
+                  handleHashClick(event, link.href);
+                  setOpen(false);
+                }}
                 className="block py-2 text-sm text-text-muted transition hover:text-accent"
               >
                 {link.label}
@@ -87,6 +108,9 @@ export default function Navbar() {
               </Link>
             </li>
           )}
+          <li className="flex items-center gap-2 py-2">
+            <PreviewToggleButton />
+          </li>
           <li className="py-2">
             <AdminUnlock />
           </li>

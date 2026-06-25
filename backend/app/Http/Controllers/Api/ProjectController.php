@@ -13,7 +13,12 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        return ProjectResource::collection(Project::ordered()->get());
+        return ProjectResource::collection(Project::ordered()->with('images')->get());
+    }
+
+    public function show(Project $project)
+    {
+        return new ProjectResource($project->load('images'));
     }
 
     public function store(StoreProjectRequest $request)

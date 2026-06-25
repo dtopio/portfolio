@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Pencil } from 'lucide-react';
 import {
@@ -36,15 +36,18 @@ function toForm(skill: Skill) {
 export default function EditSkillDialog({
   skill,
   onUpdated,
+  categories = [],
 }: {
   skill: Skill;
   onUpdated: () => void;
+  categories?: string[];
 }) {
   const { token } = useAdmin();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(() => toForm(skill));
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const categoryListId = useId();
 
   if (!token) return null;
 
@@ -111,10 +114,16 @@ export default function EditSkillDialog({
             <Label htmlFor="edit-skill-category">Category</Label>
             <Input
               id="edit-skill-category"
+              list={categoryListId}
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
               required
             />
+            <datalist id={categoryListId}>
+              {categories.map((category) => (
+                <option key={category} value={category} />
+              ))}
+            </datalist>
           </div>
 
           <div className="space-y-1.5">

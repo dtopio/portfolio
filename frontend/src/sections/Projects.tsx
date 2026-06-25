@@ -1,38 +1,22 @@
-import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useFetch } from '../hooks/useFetch';
 import { getProjects } from '../services/api';
 import Section from '../components/Section';
 import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
 import ProjectCard from '../components/ProjectCard';
-import AddProjectDialog from '../components/AddProjectDialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { staggerContainer } from '../lib/motion';
 
-const ALL_FILTER = '__all__';
+const FALLBACK_LIMIT = 4;
 
 export default function Projects() {
-  const { data: projects, loading, error, refetch } = useFetch(getProjects);
-  const [filter, setFilter] = useState<string | null>(null);
+  const { data: projects, loading, error } = useFetch(['projects'], getProjects);
 
-  const filters = useMemo(() => {
-    const tags = new Set<string>();
-    for (const project of projects ?? []) {
-      project.tech_stack.forEach((tech) => tags.add(tech));
-      project.tags.forEach((tag) => tags.add(tag));
-    }
-    return Array.from(tags).sort();
-  }, [projects]);
-
-  const visible = (projects ?? []).filter(
-    (project) =>
-      !filter || project.tech_stack.includes(filter) || project.tags.includes(filter)
-  );
+  const featured = (projects ?? []).filter((project) => project.featured);
+  const fallback = (projects ?? []).slice(0, FALLBACK_LIMIT);
+  const teaser = featured.length > 0 ? featured : fallback;
 
   return (
     <Section
@@ -40,40 +24,31 @@ export default function Projects() {
       index={3}
       title="Projects"
       subtitle="A few things I've built recently."
-      action={<AddProjectDialog onCreated={refetch} />}
+      action={
+        <Button asChild variant="outline" size="sm">
+          <Link to="/projects">View All Projects</Link>
+        </Button>
+      }
     >
       {loading && <LoadingState label="Loading projects…" />}
       {error && <ErrorState message={error} />}
 
-      {!loading && !error && (
-        <>
-          {filters.length > 0 && (
-            <div className="mb-8">
-              <Select
-                value={filter ?? ALL_FILTER}
-                onValueChange={(value) => setFilter(value === ALL_FILTER ? null : value)}
-              >
-                <SelectTrigger className="w-full sm:w-64">
-                  <SelectValue placeholder="Filter by tag" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={ALL_FILTER}>All</SelectItem>
-                  {filters.map((tag) => (
-                    <SelectItem key={tag} value={tag}>
-                      {tag}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+      {!loading && !error && teaser.length === 0 && (
+        <p className="text-text-muted">No projects added yet.</p>
+      )}
 
-          <div className="grid gap-6 sm:grid-cols-2">
-            {visible.map((project) => (
-              <ProjectCard key={project.id} project={project} onUpdated={refetch} />
-            ))}
-          </div>
-        </>
+      {!loading && !error && teaser.length > 0 && (
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid gap-6 sm:grid-cols-2"
+        >
+          {teaser.map((project) => (
+            <ProjectCard key={project.id} project={project} editable={false} />
+          ))}
+        </motion.div>
       )}
     </Section>
   );

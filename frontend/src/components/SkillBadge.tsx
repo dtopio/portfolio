@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion';
 import type { Skill } from '../types';
 import EditSkillDialog from './EditSkillDialog';
 import DeleteSkillDialog from './DeleteSkillDialog';
 import ToggleFeaturedButton from './ToggleFeaturedButton';
 import { useAdmin } from '../context/AdminContext';
+import { fadeUpItem } from '../lib/motion';
 
 const LEVEL_DOTS: Record<string, number> = {
   Advanced: 3,
@@ -24,7 +26,10 @@ export default function SkillBadge({
   const showAdminControls = editable && !!onUpdated && !!token;
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border bg-surface/80 px-4 py-3 transition hover:border-accent/40 hover:bg-surface">
+    <motion.div
+      variants={fadeUpItem}
+      className="flex items-center justify-between rounded-lg border border-border bg-surface/80 px-4 py-3 transition hover:border-accent/40 hover:bg-surface"
+    >
       <span className="flex items-center gap-2.5">
         {skill.icon && (
           <img
@@ -61,6 +66,6 @@ export default function SkillBadge({
           </>
         )}
       </span>
-    </div>
+    </motion.div>
   );
 }

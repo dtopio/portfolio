@@ -14,11 +14,11 @@ import { Label } from '@/components/ui/label';
 import { useAdmin } from '../context/AdminContext';
 
 export default function AdminUnlock() {
-  const { token, setToken } = useAdmin();
+  const { realToken, setToken } = useAdmin();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 
-  if (token) {
+  if (realToken) {
     return (
       <button
         type="button"

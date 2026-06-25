@@ -1,9 +1,9 @@
-import { CV_DOWNLOAD_URL } from '../services/api';
-import { useProfile } from '../context/ProfileContext';
+import { useFetch } from '../hooks/useFetch';
+import { CV_DOWNLOAD_URL, getProfile } from '../services/api';
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const { profile } = useProfile();
+  const { data: profile } = useFetch(['profile'], getProfile);
 
   return (
     <footer className="border-t border-border">

@@ -10,6 +10,7 @@ import type {
   NewSkillPayload,
   Profile,
   Project,
+  ProjectImage,
   Skill,
   UpdateProfilePayload,
   UpdateSkillPayload,
@@ -27,6 +28,11 @@ export async function getSkills(): Promise<Skill[]> {
 
 export async function getProjects(): Promise<Project[]> {
   const { data } = await client.get<ApiCollection<Project>>('/projects');
+  return data.data;
+}
+
+export async function getProject(id: number): Promise<Project> {
+  const { data } = await client.get<{ data: Project }>(`/projects/${id}`);
   return data.data;
 }
 
@@ -106,6 +112,19 @@ export async function updateSkill(
   return data.data;
 }
 
+export async function renameSkillCategory(
+  from: string,
+  to: string,
+  token: string
+): Promise<number> {
+  const { data } = await client.post<{ renamed: number }>(
+    '/skills/rename-category',
+    { from, to },
+    authHeader(token)
+  );
+  return data.renamed;
+}
+
 export async function deleteSkill(id: number, token: string): Promise<void> {
   await client.delete(`/skills/${id}`, authHeader(token));
 }
@@ -147,6 +166,25 @@ export async function markMessageRead(id: number, token: string): Promise<Messag
 
 export async function deleteMessage(id: number, token: string): Promise<void> {
   await client.delete(`/messages/${id}`, authHeader(token));
+}
+
+export async function uploadProjectImages(
+  projectId: number,
+  files: File[],
+  token: string
+): Promise<ProjectImage[]> {
+  const formData = new FormData();
+  files.forEach((file) => formData.append('images[]', file));
+  const { data } = await client.post<ApiCollection<ProjectImage>>(
+    `/projects/${projectId}/images`,
+    formData,
+    authHeader(token)
+  );
+  return data.data;
+}
+
+export async function deleteProjectImage(id: number, token: string): Promise<void> {
+  await client.delete(`/project-images/${id}`, authHeader(token));
 }
 
 export function isAxiosValidationError(
